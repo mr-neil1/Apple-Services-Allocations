@@ -23,3 +23,12 @@ router.post('/orange/token', async (req, res) => {
 });
 
 module.exports = router;
+// paypal paiement
+
+const express = require('express');
+const { createPayPalOrder, capturePayPalOrder } = require('../controllers/paymentController');
+
+router.post('/paypal/create-order', createPayPalOrder);
+router.post('/paypal/capture-order/:orderID', capturePayPalOrder);
+
+module.exports = router;
