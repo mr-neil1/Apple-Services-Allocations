@@ -1,5 +1,3 @@
-// src/services/paymentService.ts
-
 export interface PaymentData {
   amount: number;
   method: 'paypal' | 'orange-money' | 'mtn-momo' | 'bitcoin';
@@ -16,7 +14,6 @@ export const paymentService = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount }),
       });
-
       const data = await res.json();
       return data.id || null;
     } catch (err) {
@@ -31,13 +28,26 @@ export const paymentService = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
-
       const data = await res.json();
       return data.status === 'COMPLETED';
     } catch (err) {
       console.error('Erreur capture PayPal :', err);
       return false;
     }
+  },
+
+  async processPayment(paymentData: PaymentData): Promise<{ success: boolean }> {
+    const { valid, errors } = this.validatePaymentData(paymentData);
+    if (!valid) {
+      console.warn('Erreur validation paiement:', errors);
+      return { success: false };
+    }
+
+    // Simulation simple pour Orange, MTN et Bitcoin
+    // À remplacer plus tard par vraies API
+    return new Promise(resolve => {
+      setTimeout(() => resolve({ success: true }), 2000);
+    });
   },
 
   validatePaymentData(paymentData: PaymentData): { valid: boolean; errors: string[] } {
