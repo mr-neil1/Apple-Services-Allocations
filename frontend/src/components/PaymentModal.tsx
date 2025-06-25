@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CreditCard, Smartphone, DollarSign, Bitcoin, Check, AlertCircle } from 'lucide-react';
-import { paymentService } from '.../paymentService';
+import { paymentService } from '../services/paymentService';
 interface Article {
   id: string;
   name: string;
