@@ -38,20 +38,42 @@ export const paymentService = {
     }
   },
 
-  // Exemple générique
-  async processPayment(paymentData: PaymentData): Promise<{ success: boolean; transactionId?: string }> {
-    if (paymentData.method === 'paypal') {
-      const orderId = await paymentService.createPaypalOrder(paymentData.amount);
-      if (!orderId) return { success: false };
+const { valid, errors } = paymentService.validatePaymentData(paymentData);
+   if (!valid) {
+  console.warn('Erreur validation paiement:', errors);
+  return { success: false };
+}
 
-      const success = await paymentService.capturePaypalOrder(orderId);
-      return {
-        success,
-        transactionId: success ? `PAYPAL_${orderId}` : undefined,
-      };
-    }
+validatePaymentData(paymentData: PaymentData): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
 
-    // Pour Orange, Bitcoin, etc. plus tard
-    return { success: false };
-  },
-};
+  if (!paymentData.amount || paymentData.amount <= 0) {
+    errors.push('Montant invalide');
+  }
+
+  switch (paymentData.method) {
+    case 'orange-money':
+    case 'mtn-momo':
+      if (!paymentData.phoneNumber || !/^\+?[1-9]\d{8,14}$/.test(paymentData.phoneNumber)) {
+        errors.push('Numéro de téléphone invalide');
+      }
+      break;
+
+    case 'paypal':
+      if (!paymentData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentData.email)) {
+        errors.push('Email PayPal invalide');
+      }
+      break;
+
+    case 'bitcoin':
+      if (!paymentData.bitcoinAddress || paymentData.bitcoinAddress.length < 26) {
+        errors.push('Adresse Bitcoin invalide');
+      }
+      break;
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}

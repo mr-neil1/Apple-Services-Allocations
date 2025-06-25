@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CreditCard, Smartphone, DollarSign, Bitcoin, Check, AlertCircle } from 'lucide-react';
-
+import { paymentService } from '.../paymentService';
 interface Article {
   id: string;
   name: string;
@@ -59,22 +59,31 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ article, onClose, onSuccess
     }
   ];
 
-  const handlePayment = async () => {
-    if (!selectedMethod) return;
+const handlePayment = async () => {
+  if (!selectedMethod) return;
 
-    setIsProcessing(true);
+  setIsProcessing(true);
 
-    // Simulation du processus de paiement
-    await new Promise(resolve => setTimeout(resolve, 3000));
+  const paymentData = {
+    amount: article.price,
+    method: selectedMethod === 'momo' ? 'mtn-momo' : selectedMethod,
+    phoneNumber,
+    email: "client@exemple.com", // tu peux ajouter un champ email dynamique plus tard
+    bitcoinAddress,
+  };
 
-    setIsProcessing(false);
+  const result = await paymentService.processPayment(paymentData);
+
+  setIsProcessing(false);
+  if (result.success) {
     setIsSuccess(true);
-
-    // Attendre 2 secondes puis confirmer le succès
     setTimeout(() => {
       onSuccess(article);
     }, 2000);
-  };
+  } else {
+    alert("Échec du paiement. Veuillez réessayer.");
+  }
+};
 
   const renderPaymentForm = () => {
     switch (selectedMethod) {
