@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const { createPayPalOrder, capturePayPalOrder } = require('../controllers/paymentController');
 
-// Exemple de token Orange
+// 🔶 Orange Money – Récupération du token
 router.post('/orange/token', async (req, res) => {
   try {
     const credentials = Buffer.from(`${process.env.ORANGE_CLIENT_ID}:${process.env.ORANGE_CLIENT_SECRET}`).toString('base64');
-    const response = await axios.post('https://api.orange.com/oauth/v3/token', 
+    const response = await axios.post(
+      'https://api.orange.com/oauth/v3/token',
       'grant_type=client_credentials',
       {
         headers: {
@@ -22,13 +24,9 @@ router.post('/orange/token', async (req, res) => {
   }
 });
 
-module.exports = router;
-// paypal paiement
-
-const express = require('express');
-const { createPayPalOrder, capturePayPalOrder } = require('../controllers/paymentController');
-
+// 🔵 PayPal – Création et capture de commande
 router.post('/paypal/create-order', createPayPalOrder);
 router.post('/paypal/capture-order/:orderID', capturePayPalOrder);
 
+// 📦 Exporter le routeur une seule fois
 module.exports = router;

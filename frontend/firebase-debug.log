@@ -1,0 +1,16 @@
+[debug] [2025-06-25T10:30:00.424Z] ----------------------------------------------------------------------
+[debug] [2025-06-25T10:30:00.429Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lenovo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2025-06-25T10:30:00.429Z] CLI Version:   14.8.0
+[debug] [2025-06-25T10:30:00.429Z] Platform:      win32
+[debug] [2025-06-25T10:30:00.429Z] Node Version:  v22.15.0
+[debug] [2025-06-25T10:30:00.430Z] Time:          Wed Jun 25 2025 11:30:00 GMT+0100 (West Africa Standard Time)
+[debug] [2025-06-25T10:30:00.430Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-06-25T10:30:00.723Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-06-25T10:30:00.724Z] > authorizing via signed-in user (samyneil4@gmail.com)
+[debug] [2025-06-25T10:30:00.724Z] [iam] checking project apple-service-allocation for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-06-25T10:30:00.725Z] Checked if tokens are valid: true, expires at: 1750850447411
+[debug] [2025-06-25T10:30:00.726Z] Checked if tokens are valid: true, expires at: 1750850447411
+[debug] [2025-06-25T10:30:00.733Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/apple-service-allocation:testIamPermissions [none]
+[debug] [2025-06-25T10:30:00.733Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/apple-service-allocation:testIamPermissions x-goog-quota-user=projects/apple-service-allocation
+[debug] [2025-06-25T10:30:00.733Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/apple-service-allocation:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
