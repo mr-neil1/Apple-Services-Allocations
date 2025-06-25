@@ -1,3 +1,5 @@
+// src/services/paymentService.ts
+
 export interface PaymentData {
   amount: number;
   method: 'paypal' | 'orange-money' | 'mtn-momo' | 'bitcoin';
@@ -38,42 +40,37 @@ export const paymentService = {
     }
   },
 
-const { valid, errors } = paymentService.validatePaymentData(paymentData);
-   if (!valid) {
-  console.warn('Erreur validation paiement:', errors);
-  return { success: false };
-}
+  validatePaymentData(paymentData: PaymentData): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
 
-validatePaymentData(paymentData: PaymentData): { valid: boolean; errors: string[] } {
-  const errors: string[] = [];
+    if (!paymentData.amount || paymentData.amount <= 0) {
+      errors.push('Montant invalide');
+    }
 
-  if (!paymentData.amount || paymentData.amount <= 0) {
-    errors.push('Montant invalide');
+    switch (paymentData.method) {
+      case 'orange-money':
+      case 'mtn-momo':
+        if (!paymentData.phoneNumber || !/^\+?[1-9]\d{8,14}$/.test(paymentData.phoneNumber)) {
+          errors.push('Numéro de téléphone invalide');
+        }
+        break;
+
+      case 'paypal':
+        if (!paymentData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentData.email)) {
+          errors.push('Email PayPal invalide');
+        }
+        break;
+
+      case 'bitcoin':
+        if (!paymentData.bitcoinAddress || paymentData.bitcoinAddress.length < 26) {
+          errors.push('Adresse Bitcoin invalide');
+        }
+        break;
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors,
+    };
   }
-
-  switch (paymentData.method) {
-    case 'orange-money':
-    case 'mtn-momo':
-      if (!paymentData.phoneNumber || !/^\+?[1-9]\d{8,14}$/.test(paymentData.phoneNumber)) {
-        errors.push('Numéro de téléphone invalide');
-      }
-      break;
-
-    case 'paypal':
-      if (!paymentData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentData.email)) {
-        errors.push('Email PayPal invalide');
-      }
-      break;
-
-    case 'bitcoin':
-      if (!paymentData.bitcoinAddress || paymentData.bitcoinAddress.length < 26) {
-        errors.push('Adresse Bitcoin invalide');
-      }
-      break;
-  }
-
-  return {
-    valid: errors.length === 0,
-    errors,
-  };
-}
+};
