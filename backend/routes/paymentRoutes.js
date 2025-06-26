@@ -30,3 +30,7 @@ router.post('/paypal/capture-order/:orderID', capturePayPalOrder);
 
 // 📦 Exporter le routeur une seule fois
 module.exports = router;
+//mtn
+const { requestToPay } = require('../controllers/mtnController');
+
+router.post('/mtn/request-to-pay', requestToPay);
